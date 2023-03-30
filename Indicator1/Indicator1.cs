@@ -20,6 +20,12 @@ namespace Indicator1
         [InputParameter("Number of levels", 10, 1, 99999, 1, 0)]
         public int Level2Count = 10;
 
+        [InputParameter("Highlight absorption bars", 40)]
+        internal bool HighlightAbsorptionBars = false;
+
+        [InputParameter("Absorption bar color", 15)]
+        internal Color AbsorptionBarColor;
+
         public override string ShortName => $"{this.Name} ({this.Level2Count}; {this.Format(this.CurrenctDataType)})";
 
         internal DataType CurrenctDataType
@@ -141,7 +147,40 @@ namespace Indicator1
             var (bid, ask) = this.GetCachedItems(0);
             this.SetValue(ask, 0, 0);
             this.SetValue(bid, 1, 0);
+
+
+            //-----------------------------------
+
+            var isNewBar = this.HistoricalData.Period == Period.TICK1 && this.HistoricalData.Aggregation is HistoryAggregationTick
+                ? args.Reason == UpdateReason.NewTick
+                : args.Reason == UpdateReason.HistoricalBar || args.Reason == UpdateReason.NewBar;
+
+            int offset = 0;
+            var index = this.Count - 1 - offset;
+            if (index < 0)
+                return;
+
+            var volumeAnalysis = this.HistoricalData[index, SeekOriginHistory.Begin].VolumeAnalysisData;
+            if (volumeAnalysis != null) {
+                var close = this.Close(offset);
+                var open = this.Open(offset);
+
+                var isGrownBar = close > open;
+                var isDoji = close == open;
+                var isAbsorptionBar = !isDoji && ((volumeAnalysis.Total.Delta < 0 && isGrownBar) || (volumeAnalysis.Total.Delta > 0 && !isGrownBar));
+
+
+                //
+                // Set markers
+                //
+                if (this.HighlightAbsorptionBars && isAbsorptionBar)
+                    this.LinesSeries[0].SetMarker(offset, this.AbsorptionBarColor);
+            }
+
+
         }
+
+
         protected override void OnClear()
         {
             if (this.Symbol != null)
