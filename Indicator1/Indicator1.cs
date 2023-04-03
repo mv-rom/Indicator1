@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using TradingPlatform.BusinessLayer;
+using TradingPlatform.BusinessLayer.Licence;
 
 namespace Indicator1
 {
@@ -56,6 +57,7 @@ namespace Indicator1
             this.AddLineLevel(0, "0'Line", Color.Aqua, 1, LineStyle.Solid);
 
             this.SeparateWindow = true;
+            //this.FileFullPath = Path.Combine(Directory.GetCurrentDirectory(), "slippage.csv");
         }
 
         public override IList<SettingItem> Settings
@@ -99,6 +101,7 @@ namespace Indicator1
             {
                 AggregateMethod = AggregateMethod.ByPriceLVL,
                 LevelsCount = this.Level2Count,
+                //CustomTickSize = this.CurrentChart.TickSize,
                 CalculateCumulative = true
             });
 
@@ -168,19 +171,18 @@ namespace Indicator1
 
                 var isGrownBar = close > open;
                 var isDoji = close == open;
-                var isAbsorptionBar = !isDoji && 
-                    ((volumeAnalysis.Total.Delta < 0 && isGrownBar) || 
-                    (volumeAnalysis.Total.Delta > 0 && !isGrownBar));
+                var isAbsorptionBarAsk = !isDoji && (volumeAnalysis.Total.Delta < 0 && isGrownBar);
+                var isAbsorptionBarBid = !isDoji && (volumeAnalysis.Total.Delta > 0 && !isGrownBar);
 
 
                 //
                 // Set markers
                 //
-                if (this.HighlightAbsorptionBars && isAbsorptionBar)
+                if (this.HighlightAbsorptionBars && isAbsorptionBarAsk)
                     this.LinesSeries[0].SetMarker(offset, this.AbsorptionBarColor);
+                if (this.HighlightAbsorptionBars && isAbsorptionBarBid)
+                    this.LinesSeries[1].SetMarker(offset, this.AbsorptionBarColor);
             }
-
-
         }
 
 
