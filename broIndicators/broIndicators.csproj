@@ -6,25 +6,22 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <Platforms>AnyCPU</Platforms>
     <AlgoType>Indicator</AlgoType>
-    <AssemblyName>Indicator1</AssemblyName>
-    <RootNamespace>Indicator1</RootNamespace>
-    <FileVersion>1.124.15</FileVersion>
-    <AssemblyVersion>1.124.15</AssemblyVersion>
+    <AssemblyName>broIndicators</AssemblyName>
+    <RootNamespace>broIndicators</RootNamespace>
+    <FileVersion>1.129.11</FileVersion>
+    <AssemblyVersion>1.129.11</AssemblyVersion>
     <IsPublishable>True</IsPublishable>
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>C:\QuantowerNew\TradingPlatform\v1.129.11\..\..\Settings\Scripts\Indicators\Indicator1</OutputPath>
+    <OutputPath>C:\QuantowerNew\TradingPlatform\v1.129.11\..\..\Settings\Scripts\Indicators\broIndicators</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>C:\QuantowerNew\TradingPlatform\v1.129.11\..\..\Settings\Scripts\Indicators\Indicator1</OutputPath>
+    <OutputPath>C:\QuantowerNew\TradingPlatform\v1.129.11\..\..\Settings\Scripts\Indicators\broIndicators</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BarsData">
-      <HintPath>C:\QuantowerNew\TradingPlatform\v1.129.11\bin\Scripts\Indicators\Bars data\BarsData.dll</HintPath>
-    </Reference>
     <Reference Include="System.Drawing.Common">
-      <HintPath>C:\QuantowerNew\TradingPlatform\v1.129.11\bin\System\System.Drawing.Common.dll</HintPath>
+      <HintPath>C:\QuantowerNew\TradingPlatform\v$(AssemblyVersion)\bin\System\System.Drawing.Common.dll</HintPath>
     </Reference>
     <Reference Include="TradingPlatform.BusinessLayer">
       <HintPath>C:\QuantowerNew\TradingPlatform\v1.129.11\bin\TradingPlatform.BusinessLayer.dll</HintPath>

@@ -6,15 +6,11 @@ using System.Linq;
 using TradingPlatform.BusinessLayer;
 using TradingPlatform.BusinessLayer.Licence;
 
-namespace Indicator1
+namespace broIndicators
 {
-    /// <summary>
-    /// An example of blank indicator. Add your code, compile it and use on the charts in the assigned trading terminal.
-    /// Information about API you can find here: http://api.quantower.com
-    /// Code samples: https://github.com/Quantower/Examples
-    /// </summary>
 	public class broDepthOfBidAsk : Indicator
     {
+        #region Parameters
         private const PriceType BID_PRICE_TYPE = PriceType.Open;
         private const PriceType ASK_PRICE_TYPE = PriceType.Close;
 
@@ -26,6 +22,7 @@ namespace Indicator1
 
         [InputParameter("Absorption bar color", 15)]
         internal Color AbsorptionBarColor = Color.Yellow;
+        #endregion Parameters
 
         public override string ShortName => $"{this.Name} ({this.Level2Count}; {this.Format(this.CurrenctDataType)})";
 

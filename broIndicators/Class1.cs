@@ -4,11 +4,10 @@ using System.Text;
 using System.Collections.Generic;
 using TradingPlatform.BusinessLayer;
 
-namespace Indicator1
+namespace broIndicators
 {
     public class broClass1 : Indicator
     {
-        /*
         public broClass1()
             : base()
         {
@@ -25,6 +24,7 @@ namespace Indicator1
 
         protected override void OnInit() { }
 
+        /*
         protected override void OnUpdate(UpdateArgs args) { }
         public override void OnPaintChart(PaintChartEventArgs args)
         {

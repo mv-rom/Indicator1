@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
-using BarsDataIndicators.Utils;
+//using BarsDataIndicators.Utils;
 using TradingPlatform.BusinessLayer;
 
-namespace Indicator1
+namespace broIndicators
 {
-    public class IndicatorCumulativeDeltaChannel //: CandleDrawIndicator, IVolumeAnalysisIndicator
+    public class broCumulativeDeltaChannel //: CandleDrawIndicator, IVolumeAnalysisIndicator
     {
         //public override string ShortName => this.Name;
 /*
