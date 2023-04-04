@@ -51,7 +51,7 @@ namespace broIndicators
 
             this.AddLineSeries("Asks depth", Color.FromArgb(235, 96, 47), 2, LineStyle.Histogramm); //Color.CadetBlue
             this.AddLineSeries("Bids depth", Color.FromArgb(55, 219, 186), 2, LineStyle.Histogramm);
-            this.AddLineLevel(0, "0'Line", Color.Aqua, 1, LineStyle.Solid);
+            this.AddLineLevel(0, "0'Line", Color.Gray, 1, LineStyle.Solid);
 
             this.SeparateWindow = true;
             //this.FileFullPath = Path.Combine(Directory.GetCurrentDirectory(), "slippage.csv");
@@ -150,12 +150,12 @@ namespace broIndicators
 
 
             //-----------------------------------
-
+/*
             var isNewBar = this.HistoricalData.Period == Period.TICK1 &&
                             this.HistoricalData.Aggregation is HistoryAggregationTick
                 ? args.Reason == UpdateReason.NewTick
                 : args.Reason == UpdateReason.HistoricalBar || args.Reason == UpdateReason.NewBar;
-
+*/
             int offset = 0;
             var index = this.Count - 1 - offset;
             if (index < 0)
@@ -175,10 +175,17 @@ namespace broIndicators
                 //
                 // Set markers
                 //
-                if (this.HighlightAbsorptionBars && isAbsorptionBarAsk)
-                    this.LinesSeries[0].SetMarker(offset, this.AbsorptionBarColor);
-                if (this.HighlightAbsorptionBars && isAbsorptionBarBid)
-                    this.LinesSeries[1].SetMarker(offset, this.AbsorptionBarColor);
+                if (this.HighlightAbsorptionBars)
+                {
+                    if (isAbsorptionBarAsk)
+                        this.LinesSeries[0].SetMarker(offset, this.AbsorptionBarColor);
+                    else
+                        this.LinesSeries[0].RemoveMarker(offset);
+                    if (isAbsorptionBarBid)
+                        this.LinesSeries[1].SetMarker(offset, this.AbsorptionBarColor);
+                    else
+                        this.LinesSeries[1].RemoveMarker(offset);
+                }
             }
         }
 
