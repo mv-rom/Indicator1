@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using TradingPlatform.BusinessLayer;
+using TradingPlatform.BusinessLayer.Licence;
 
 namespace Indicator1
 {
@@ -14,9 +15,8 @@ namespace Indicator1
     /// </summary>
 	public class broDepthOfBidAsk : Indicator
     {
-        #region Parameters
-        private const PriceType ASK_PRICE_TYPE = PriceType.Close;
         private const PriceType BID_PRICE_TYPE = PriceType.Open;
+        private const PriceType ASK_PRICE_TYPE = PriceType.Close;
 
         [InputParameter("Number of levels", 10, 1, 99999, 1, 0)]
         public int Level2Count = 10;
@@ -46,10 +46,6 @@ namespace Indicator1
         private HistoricalDataCustom cumulativeCache;
         private HistoricalDataCustom imbalanceCache;
 
-        private PairColor pairColor;
-        
-        #endregion Parameters
-
 
 
         public broDepthOfBidAsk()
@@ -58,17 +54,10 @@ namespace Indicator1
 
             this.AddLineSeries("Asks depth", Color.FromArgb(235, 96, 47), 2, LineStyle.Histogramm); //Color.CadetBlue
             this.AddLineSeries("Bids depth", Color.FromArgb(55, 219, 186), 2, LineStyle.Histogramm);
-            this.AddLineLevel(0, "0'Line", Color.White, 1, LineStyle.Solid);
+            this.AddLineLevel(0, "0'Line", Color.Aqua, 1, LineStyle.Solid);
 
             this.SeparateWindow = true;
-
-            this.pairColor = new PairColor()
-            {
-                Color1 = Color.FromArgb(255, 251, 87, 87),
-                Color2 = Color.FromArgb(255, 0, 178, 89),
-                Text1 = "Up",
-                Text2 = "Down"
-            };
+            //this.FileFullPath = Path.Combine(Directory.GetCurrentDirectory(), "slippage.csv");
         }
 
         public override IList<SettingItem> Settings
@@ -105,7 +94,6 @@ namespace Indicator1
         }
         protected override void OnUpdate(UpdateArgs args)
         {
-
             if (args.Reason == UpdateReason.HistoricalBar)
                 return;
 
@@ -113,6 +101,7 @@ namespace Indicator1
             {
                 AggregateMethod = AggregateMethod.ByPriceLVL,
                 LevelsCount = this.Level2Count,
+                //CustomTickSize = this.CurrentChart.TickSize,
                 CalculateCumulative = true
             });
 
@@ -154,8 +143,8 @@ namespace Indicator1
 
                 //this.imbalanceCache[BID_PRICE_TYPE] = bidImbalance;
                 //this.imbalanceCache[ASK_PRICE_TYPE] = 100 - bidImbalance;
-                this.imbalanceCache[ASK_PRICE_TYPE] = -ac_diffPercent;
                 this.imbalanceCache[BID_PRICE_TYPE] = bc_diffPercent;
+                this.imbalanceCache[ASK_PRICE_TYPE] = -ac_diffPercent;
             }
 
             var (bid, ask) = this.GetCachedItems(0);
@@ -165,7 +154,8 @@ namespace Indicator1
 
             //-----------------------------------
 
-            var isNewBar = this.HistoricalData.Period == Period.TICK1 && this.HistoricalData.Aggregation is HistoryAggregationTick
+            var isNewBar = this.HistoricalData.Period == Period.TICK1 &&
+                            this.HistoricalData.Aggregation is HistoryAggregationTick
                 ? args.Reason == UpdateReason.NewTick
                 : args.Reason == UpdateReason.HistoricalBar || args.Reason == UpdateReason.NewBar;
 
@@ -181,22 +171,18 @@ namespace Indicator1
 
                 var isGrownBar = close > open;
                 var isDoji = close == open;
-                var isAbsorptionBarAsk = !isDoji && (volumeAnalysis.Total.Delta < 0 && isGrownBar) ? 1 : 0;
-                var isAbsorptionBarBid = !isDoji && (volumeAnalysis.Total.Delta > 0 && !isGrownBar) ? 1 : 0;
+                var isAbsorptionBarAsk = !isDoji && (volumeAnalysis.Total.Delta < 0 && isGrownBar);
+                var isAbsorptionBarBid = !isDoji && (volumeAnalysis.Total.Delta > 0 && !isGrownBar);
 
 
                 //
                 // Set markers
                 //
-                if (this.HighlightAbsorptionBars) {
-                    if (isAbsorptionBarAsk == 1)
-                        this.LinesSeries[0].SetMarker(offset, this.AbsorptionBarColor);
-                    if (isAbsorptionBarBid == 1)
-                        this.LinesSeries[1].SetMarker(offset, this.AbsorptionBarColor);
-                }
+                if (this.HighlightAbsorptionBars && isAbsorptionBarAsk)
+                    this.LinesSeries[0].SetMarker(offset, this.AbsorptionBarColor);
+                if (this.HighlightAbsorptionBars && isAbsorptionBarBid)
+                    this.LinesSeries[1].SetMarker(offset, this.AbsorptionBarColor);
             }
-
-
         }
 
 

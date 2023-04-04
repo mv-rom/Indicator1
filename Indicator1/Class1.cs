@@ -8,6 +8,7 @@ namespace Indicator1
 {
     public class broClass1 : Indicator
     {
+        /*
         public broClass1()
             : base()
         {
@@ -67,5 +68,6 @@ namespace Indicator1
                 }
             }
         }
+        */
     }
 }
