@@ -6,10 +6,9 @@ using TradingPlatform.BusinessLayer;
 
 namespace broIndicators
 {
-    public class broCumulativeDeltaChannel //: CandleDrawIndicator, IVolumeAnalysisIndicator
+    public class broCumulativeDeltaChannel : Indicator //: CandleDrawIndicator, IVolumeAnalysisIndicator
     {
-        //public override string ShortName => this.Name;
-/*
+        public override string ShortName => this.Name;
         // Define 'Period' input parameter and set allowable range (from 1 to 999) 
         [InputParameter("Period of price channel", 0, 1, 999)]
         public int Period = 20;
@@ -17,7 +16,7 @@ namespace broIndicators
         public int MinHistoryDepths => this.Period;
 
 
-        public IndicatorCumulativeDeltaChannel()
+        public broCumulativeDeltaChannel()
             : base()
         {
             this.Name = "bro Cumulative delta";
@@ -35,12 +34,14 @@ namespace broIndicators
 
             this.SeparateWindow = true;
         }
+/*
 
         protected override void OnInit()
         {
             this.IsLoading = true;
             base.OnInit();
         }
+*/
         protected override void OnUpdate(UpdateArgs args)
         {
             if (args.Reason == UpdateReason.HistoricalBar)
@@ -77,8 +78,8 @@ namespace broIndicators
                     ? prevCumulativeDelta - Math.Abs(currentItem.Total.MinDelta)
                     : Math.Min(currentItem.Total.CumulativeDelta, prevCumulativeDelta);
 
-                this.SetValues(prevCumulativeDelta, high, low, currentItem.Total.CumulativeDelta, offset);
-*/
+//                this.SetValues(prevCumulativeDelta, high, low, currentItem.Total.CumulativeDelta, offset);
+
 /*
                 //-------------------------------------------------------
                 int maxValueOffset = offset;
@@ -102,23 +103,24 @@ namespace broIndicators
                 this.SetValue(highestPrice, 0);
                 this.SetValue(lowestPrice, 1);
 */
-/*            }
-            else
+            }
+/*            else
                 this.SetHole(offset);
-        }
+            }
 
-        #region IVolumeAnalysisIndicator
+            #region IVolumeAnalysisIndicator
 
-        bool IVolumeAnalysisIndicator.IsRequirePriceLevelsCalculation => false;
-        void IVolumeAnalysisIndicator.VolumeAnalysisData_Loaded()
-        {
-            for (int i = 0; i < this.Count; i++)
-                this.CalculateIndicatorByOffset(i);
+            bool IVolumeAnalysisIndicator.IsRequirePriceLevelsCalculation => false;
+            void IVolumeAnalysisIndicator.VolumeAnalysisData_Loaded()
+            {
+                for (int i = 0; i < this.Count; i++)
+                    this.CalculateIndicatorByOffset(i);
 
-            this.IsLoading = false;
-        }
+                this.IsLoading = false;
+            }
 
-        #endregion IVolumeAnalysisIndicator
+            #endregion IVolumeAnalysisIndicator
 */
+        }
     }
 }
